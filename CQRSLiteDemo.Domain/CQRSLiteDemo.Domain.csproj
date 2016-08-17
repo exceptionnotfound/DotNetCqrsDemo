@@ -46,15 +46,15 @@
   <ItemGroup>
     <Compile Include="EventStore\InMemoryEventStore.cs" />
     <Compile Include="EventStore\SerializedEvent.cs" />
+    <Compile Include="Events\BaseEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WriteModel\Employees\Employee.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CommandHandlers\" />
     <Folder Include="Commands\" />
     <Folder Include="EventHandlers\" />
-    <Folder Include="Events\" />
     <Folder Include="ReadModel\" />
-    <Folder Include="WriteModel\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
