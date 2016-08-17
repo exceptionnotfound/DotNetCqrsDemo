@@ -1,4 +1,5 @@
 ﻿using CQRSlite.Domain;
+using CQRSLiteDemo.Domain.Events.Employees;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace CQRSLiteDemo.Domain.WriteModel.Employees
             _dateOfBirth = dateOfBirth;
             _jobTitle = jobTitle;
 
-            //TODO: ApplyChange
+            ApplyChange(new EmployeeCreatedEvent(id, firstName, lastName, dateOfBirth, jobTitle));
         }
     }
 }
