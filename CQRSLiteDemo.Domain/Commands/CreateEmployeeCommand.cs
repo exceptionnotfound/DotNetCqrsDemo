@@ -14,9 +14,10 @@ namespace CQRSLiteDemo.Domain.Commands
         public readonly DateTime DateOfBirth;
         public readonly string JobTitle;
 
-        public CreateEmployeeCommand(Guid id, string firstName, string lastName, DateTime dateOfBirth, string jobTitle)
+        public CreateEmployeeCommand(Guid id, int employeeID, string firstName, string lastName, DateTime dateOfBirth, string jobTitle)
         {
             Id = id;
+            EmployeeID = employeeID;
             FirstName = firstName;
             LastName = lastName;
             DateOfBirth = dateOfBirth;

@@ -1,4 +1,5 @@
 ﻿using CQRSLiteDemo.Domain.ReadModel.Repositories.Interfaces;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,14 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             var database = _redisConnection.GetDatabase();
             var employee = database.StringGet("employee:" + employeeID.ToString());
             return !employee.IsNull;
+        }
+
+        public EmployeeDTO GetByID(int employeeID)
+        {
+            var database = _redisConnection.GetDatabase();
+            var employee = database.StringGet("employee:" + employeeID.ToString());
+            if (employee.IsNull) return null;
+            return JsonConvert.DeserializeObject<EmployeeDTO>(employee.ToString());
         }
     }
 }

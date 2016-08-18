@@ -9,5 +9,6 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories.Interfaces
     public interface IEmployeeRepository
     {
         bool EmployeeExists(int employeeID);
+        EmployeeDTO GetByID(int employeeID);
     }
 }
