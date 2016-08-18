@@ -28,6 +28,7 @@ namespace CQRSLiteDemo.Web.Queries.DependencyResolution {
         public DefaultRegistry() {
             //Repositories
             For<IEmployeeRepository>().Use<EmployeeRepository>();
+            For<ILocationRepository>().Use<LocationRepository>();
 
             //StackExchange.Redis
             ConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect("localhost");

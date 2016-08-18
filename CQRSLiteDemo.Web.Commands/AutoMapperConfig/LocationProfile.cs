@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CQRSLiteDemo.Domain.Commands;
+using CQRSLiteDemo.Domain.Events.Locations;
+using CQRSLiteDemo.Domain.ReadModel;
 using CQRSLiteDemo.Web.Commands.Requests.Locations;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,9 @@ namespace CQRSLiteDemo.Web.Commands.AutoMapperConfig
         public LocationProfile()
         {
             CreateMap<CreateLocationRequest, CreateLocationCommand>()
-                .ConstructUsing(x => new CreateLocationCommand(Guid.NewGuid(), x.StreetAddress, x.City, x.State, x.PostalCode));
+                .ConstructUsing(x => new CreateLocationCommand(Guid.NewGuid(), x.LocationID, x.StreetAddress, x.City, x.State, x.PostalCode));
+
+            CreateMap<LocationCreatedEvent, LocationDTO>();
         }
     }
 }

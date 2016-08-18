@@ -75,6 +75,8 @@
     <Compile Include="ReadModel\LocationEmployeesDTO.cs" />
     <Compile Include="ReadModel\Repositories\EmployeeRepository.cs" />
     <Compile Include="ReadModel\Repositories\Interfaces\IEmployeeRepository.cs" />
+    <Compile Include="ReadModel\Repositories\Interfaces\ILocationRepository.cs" />
+    <Compile Include="ReadModel\Repositories\LocationRepository.cs" />
     <Compile Include="WriteModel\Employee.cs" />
     <Compile Include="WriteModel\Location.cs" />
   </ItemGroup>

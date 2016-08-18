@@ -21,7 +21,7 @@ namespace CQRSLiteDemo.Domain.CommandHandlers
 
         public void Handle(CreateLocationCommand command)
         {
-            var location = new Location(command.Id, command.StreetAddress, command.City, command.State, command.PostalCode);
+            var location = new Location(command.Id, command.LocationID, command.StreetAddress, command.City, command.State, command.PostalCode);
             _session.Add(location);
             _session.Commit();
         }

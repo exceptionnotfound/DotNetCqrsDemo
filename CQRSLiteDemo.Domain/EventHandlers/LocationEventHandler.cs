@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CQRSlite.Events;
 using CQRSLiteDemo.Domain.Events.Locations;
+using CQRSLiteDemo.Domain.ReadModel;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -22,7 +24,9 @@ namespace CQRSLiteDemo.Domain.EventHandlers
 
         public void Handle(LocationCreatedEvent message)
         {
-
+            var database = _redis.GetDatabase();
+            LocationDTO location = _mapper.Map<LocationDTO>(message);
+            database.StringSet("location:" + message.LocationID, JsonConvert.SerializeObject(location));
         }
     }
 }
