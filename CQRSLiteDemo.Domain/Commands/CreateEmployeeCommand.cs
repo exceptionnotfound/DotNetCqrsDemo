@@ -8,6 +8,7 @@ namespace CQRSLiteDemo.Domain.Commands
 {
     public class CreateEmployeeCommand : BaseCommand
     {
+        public readonly int EmployeeID;
         public readonly string FirstName;
         public readonly string LastName;
         public readonly DateTime DateOfBirth;

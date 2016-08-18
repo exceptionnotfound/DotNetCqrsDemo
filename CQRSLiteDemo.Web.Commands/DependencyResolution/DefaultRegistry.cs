@@ -24,6 +24,7 @@ namespace CQRSLiteDemo.Web.Commands.DependencyResolution {
     using CQRSlite.Events;
     using Domain.Events;
     using Domain.EventStore;
+    using Requests.Employees;
     using StackExchange.Redis;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
@@ -76,12 +77,12 @@ namespace CQRSLiteDemo.Web.Commands.DependencyResolution {
             For<IConnectionMultiplexer>().Use(multiplexer);
 
             //FluentValidation
-            //FluentValidation.AssemblyScanner.FindValidatorsInAssemblyContaining<InitializeMCORequestValidator>()
-            //  .ForEach(result =>
-            //  {
-            //      For(result.InterfaceType)
-            //         .Use(result.ValidatorType);
-            //  });
+            FluentValidation.AssemblyScanner.FindValidatorsInAssemblyContaining<CreateEmployeeRequestValidator>()
+              .ForEach(result =>
+              {
+                  For(result.InterfaceType)
+                     .Use(result.ValidatorType);
+              });
         }
 
         #endregion

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CQRSlite.Events;
 using CQRSLiteDemo.Domain.Events.Employees;
-using CQRSLiteDemo.Domain.WriteModel.Employees;
+using CQRSLiteDemo.Domain.ReadModel;
+using CQRSLiteDemo.Domain.WriteModel;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
@@ -25,8 +26,8 @@ namespace CQRSLiteDemo.Domain.EventHandlers
         public void Handle(EmployeeCreatedEvent message)
         {
             var database = _redis.GetDatabase();
-            Employee employee = _mapper.Map<Employee>(message);
-            database.StringSet(message.Id.ToString(), JsonConvert.SerializeObject(employee));
+            EmployeeDTO employee = _mapper.Map<EmployeeDTO>(message);
+            database.StringSet("employee:" + message.EmployeeID.ToString(), JsonConvert.SerializeObject(employee));
         }
     }
 }

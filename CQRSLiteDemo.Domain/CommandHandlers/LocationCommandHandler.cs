@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace CQRSLiteDemo.Domain.CommandHandlers
 {
-    public class EmployeeCommandHandler : ICommandHandler<CreateEmployeeCommand>
+    public class LocationCommandHandler : ICommandHandler<CreateLocationCommand>
     {
         private readonly ISession _session;
 
-        public EmployeeCommandHandler(ISession session)
+        public LocationCommandHandler(ISession session)
         {
             _session = session;
         }
 
-        public void Handle(CreateEmployeeCommand command)
+        public void Handle(CreateLocationCommand command)
         {
-            Employee employee = new Employee(command.Id, command.EmployeeID, command.FirstName, command.LastName, command.DateOfBirth, command.JobTitle);
-            _session.Add(employee);
+            var location = new Location(command.Id, command.StreetAddress, command.City, command.State, command.PostalCode);
+            _session.Add(location);
             _session.Commit();
         }
     }
