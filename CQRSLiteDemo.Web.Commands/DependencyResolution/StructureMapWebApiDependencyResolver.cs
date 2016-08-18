@@ -17,13 +17,17 @@
 
 using System.Web.Http.Dependencies;
 using StructureMap;
+using CQRSlite.Config;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CQRSLiteDemo.Web.Commands.DependencyResolution
 {
     /// <summary>
     /// The structure map dependency resolver.
     /// </summary>
-    public class StructureMapWebApiDependencyResolver : StructureMapWebApiDependencyScope, IDependencyResolver
+    public class StructureMapWebApiDependencyResolver : StructureMapWebApiDependencyScope, IDependencyResolver, IServiceLocator
     {
         #region Constructors and Destructors
 
@@ -52,6 +56,16 @@ namespace CQRSLiteDemo.Web.Commands.DependencyResolution
         {
             IContainer child = this.Container.GetNestedContainer();
             return new StructureMapWebApiDependencyResolver(child);
+        }
+
+        public T GetService<T>()
+        {
+            return (T)GetService(typeof(T));
+        }
+
+        public IEnumerable<object> GetServices(Type serviceType)
+        {
+            return Container.GetAllInstances<object>().Where(s => s.GetType() == serviceType);
         }
 
         #endregion
