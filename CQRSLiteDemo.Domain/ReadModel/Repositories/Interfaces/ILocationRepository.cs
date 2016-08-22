@@ -10,5 +10,6 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories.Interfaces
     {
         bool LocationExists(int locationID);
         LocationDTO GetByID(int locationID);
+        bool HasEmployee(int locationID, int employeeID);
     }
 }

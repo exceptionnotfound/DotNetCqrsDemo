@@ -15,7 +15,7 @@ namespace CQRSLiteDemo.Domain.WriteModel
         private string _city;
         private string _state;
         private string _postalCode;
-        private List<Guid> _employees;
+        private List<int> _employees;
 
         private Location() { }
 
@@ -27,9 +27,23 @@ namespace CQRSLiteDemo.Domain.WriteModel
             _city = city;
             _state = state;
             _postalCode = postalCode;
-            _employees = new List<Guid>();
+            _employees = new List<int>();
 
             ApplyChange(new LocationCreatedEvent(id, locationID, streetAddress, city, state, postalCode));
+        }
+
+        public void AddEmployee(int employeeID)
+        {
+            _employees.Add(employeeID);
+
+            ApplyChange(new EmployeeAssignedToLocationEvent(Id, _locationID, employeeID));
+        }
+
+        public void RemoveEmployee(int employeeID)
+        {
+            _employees.Remove(employeeID);
+
+            ApplyChange(new EmployeeRemovedFromLocationEvent(Id, _locationID, employeeID));
         }
     }
 }

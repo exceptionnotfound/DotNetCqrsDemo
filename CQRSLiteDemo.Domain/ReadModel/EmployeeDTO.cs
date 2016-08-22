@@ -13,5 +13,7 @@ namespace CQRSLiteDemo.Domain.ReadModel
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string JobTitle { get; set; }
+        public int LocationID { get; set; }
+        public Guid AggregateID { get; set; }
     }
 }

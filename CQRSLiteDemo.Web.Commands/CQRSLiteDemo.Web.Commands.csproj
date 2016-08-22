@@ -218,6 +218,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\Employees\CreateEmployeeRequest.cs" />
+    <Compile Include="Requests\Locations\AssignEmployeeToLocationRequest.cs" />
     <Compile Include="Requests\Locations\CreateLocationRequest.cs" />
     <Compile Include="Validation\StructureMapValidatorFactory.cs" />
   </ItemGroup>

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRSLiteDemo.Web.Commands",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRSLiteDemo.Web.Queries", "CQRSLiteDemo.Web.Queries\CQRSLiteDemo.Web.Queries.csproj", "{E4F4EC77-4EEA-42A6-B7FB-18D38A7D3FCB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRSLiteDemo.Initializer", "CQRSLiteDemo.Initializer\CQRSLiteDemo.Initializer.csproj", "{46FD7AFE-EF1B-44EC-A403-3A084C0530FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E4F4EC77-4EEA-42A6-B7FB-18D38A7D3FCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4F4EC77-4EEA-42A6-B7FB-18D38A7D3FCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4F4EC77-4EEA-42A6-B7FB-18D38A7D3FCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46FD7AFE-EF1B-44EC-A403-3A084C0530FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46FD7AFE-EF1B-44EC-A403-3A084C0530FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46FD7AFE-EF1B-44EC-A403-3A084C0530FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46FD7AFE-EF1B-44EC-A403-3A084C0530FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

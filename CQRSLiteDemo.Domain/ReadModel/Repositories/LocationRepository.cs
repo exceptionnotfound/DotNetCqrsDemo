@@ -31,5 +31,12 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             var locationResult = database.StringGet("location:" + locationID.ToString());
             return !locationResult.IsNull;
         }
+
+        public bool HasEmployee(int locationID, int employeeID)
+        {
+            var database = _redisConnection.GetDatabase();
+            var location = JsonConvert.DeserializeObject<LocationDTO>(database.StringGet("location:" + locationID.ToString()));
+            return location.Employees.Contains(employeeID);
+        }
     }
 }
