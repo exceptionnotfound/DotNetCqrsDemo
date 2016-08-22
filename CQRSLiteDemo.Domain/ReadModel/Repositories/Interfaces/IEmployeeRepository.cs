@@ -10,5 +10,6 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories.Interfaces
     {
         bool EmployeeExists(int employeeID);
         EmployeeDTO GetByID(int employeeID);
+        IEnumerable<EmployeeDTO> GetAll();
     }
 }

@@ -38,5 +38,24 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             var location = JsonConvert.DeserializeObject<LocationDTO>(database.StringGet("location:" + locationID.ToString()));
             return location.Employees.Contains(employeeID);
         }
+
+        public IEnumerable<LocationDTO> GetAll()
+        {
+            List<LocationDTO> locations = new List<LocationDTO>();
+            var database = _redisConnection.GetDatabase();
+            var server = _redisConnection.GetServer("localhost", 6379);
+            var keys = server.Keys(pattern: "location:*");
+            foreach (var key in keys)
+            {
+                locations.Add(JsonConvert.DeserializeObject<LocationDTO>(database.StringGet(key)));
+            }
+            return locations;
+        }
+        public IEnumerable<EmployeeDTO> GetEmployees(int locationID)
+        {
+            List<EmployeeDTO> employees = new List<EmployeeDTO>();
+            var database = _redisConnection.GetDatabase();
+            return JsonConvert.DeserializeObject<List<EmployeeDTO>>(database.StringGet("location:" + locationID + ":employees"));
+        }
     }
 }

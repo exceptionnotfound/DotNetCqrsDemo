@@ -50,6 +50,8 @@ namespace CQRSLiteDemo.Domain.EventHandlers
             //Re-serialize the changed LocationDTO
             database.StringSet("location:" + message.NewLocationID, JsonConvert.SerializeObject(location));
 
+
+
             //Find the employee which was assigned to this Location
             var employee = JsonConvert.DeserializeObject<EmployeeDTO>(database.StringGet("employee:" + message.EmployeeID.ToString()));
 
@@ -58,6 +60,20 @@ namespace CQRSLiteDemo.Domain.EventHandlers
 
             //Re-serialize the employee back into the datastore.
             database.StringSet("employee:" + message.EmployeeID, JsonConvert.SerializeObject(employee));
+
+
+
+            //Find the list of employees for this location
+            List<EmployeeDTO> employees = new List<EmployeeDTO>();
+            var serializedEmployees = database.StringGet("location:" + message.NewLocationID + ":employees");
+            if(!serializedEmployees.IsNull)
+            {
+                employees = JsonConvert.DeserializeObject<List<EmployeeDTO>>(serializedEmployees.ToString());
+            }
+
+            employees.Add(employee);
+
+            database.StringSet("location:" + message.NewLocationID + ":employees", JsonConvert.SerializeObject(employees));
         }
 
         public void Handle(EmployeeRemovedFromLocationEvent message)
@@ -73,6 +89,22 @@ namespace CQRSLiteDemo.Domain.EventHandlers
 
             //Serialize the changed LocationDTO back into the data store.
             database.StringSet("location:" + message.OldLocationID, JsonConvert.SerializeObject(location));
+
+            var employee = JsonConvert.DeserializeObject<EmployeeDTO>(database.StringGet("employee:" + message.EmployeeID.ToString()));
+
+            List<EmployeeDTO> employees = new List<EmployeeDTO>();
+            var serializedEmployees = database.StringGet("location:" + message.OldLocationID + ":employees");
+            if(!serializedEmployees.IsNull)
+            {
+                employees = JsonConvert.DeserializeObject<List<EmployeeDTO>>(serializedEmployees.ToString());
+                var removedEmployee = employees.FirstOrDefault(x => x.EmployeeID == message.EmployeeID);
+                if (removedEmployee != null)
+                {
+                    employees.Remove(removedEmployee);
+                }
+            }
+
+            database.StringSet("location:" + message.OldLocationID + ":employees", JsonConvert.SerializeObject(employees));
         }
     }
 }

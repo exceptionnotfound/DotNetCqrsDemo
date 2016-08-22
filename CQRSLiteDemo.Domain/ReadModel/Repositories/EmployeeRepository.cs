@@ -32,5 +32,18 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             if (employee.IsNull) return null;
             return JsonConvert.DeserializeObject<EmployeeDTO>(employee.ToString());
         }
+
+        public IEnumerable<EmployeeDTO> GetAll()
+        {
+            List<EmployeeDTO> employees = new List<EmployeeDTO>();
+            var database = _redisConnection.GetDatabase();
+            var server = _redisConnection.GetServer("localhost", 6379);
+            var keys = server.Keys(pattern: "employee:*");
+            foreach(var key in keys)
+            {
+                employees.Add(JsonConvert.DeserializeObject<EmployeeDTO>(database.StringGet(key)));
+            }
+            return employees;
+        }
     }
 }

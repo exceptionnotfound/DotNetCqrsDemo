@@ -18,12 +18,14 @@ namespace CQRSLiteDemo.Web.Commands.Controllers
         private IMapper _mapper;
         private ICommandSender _commandSender;
         private ILocationRepository _locationRepo;
+        private IEmployeeRepository _employeeRepo;
 
-        public LocationController(ICommandSender commandSender, IMapper mapper, ILocationRepository locationRepo)
+        public LocationController(ICommandSender commandSender, IMapper mapper, ILocationRepository locationRepo, IEmployeeRepository employeeRepo)
         {
             _commandSender = commandSender;
             _mapper = mapper;
             _locationRepo = locationRepo;
+            _employeeRepo = employeeRepo;
         }
 
         [HttpPost]
@@ -39,11 +41,20 @@ namespace CQRSLiteDemo.Web.Commands.Controllers
         [Route("assignemployee")]
         public IHttpActionResult AssignEmployee(AssignEmployeeToLocationRequest request)
         {
-            var command = _mapper.Map<AssignEmployeeToLocationCommand>(request);
+            var employee = _employeeRepo.GetByID(request.EmployeeID);
+            if (employee.LocationID != 0)
+            {
+                var oldLocationAggregateID = _locationRepo.GetByID(employee.LocationID).AggregateID;
 
-            command.Id = _locationRepo.GetByID(request.LocationID).AggregateID;
+                RemoveEmployeeFromLocationCommand removeCommand = new RemoveEmployeeFromLocationCommand(oldLocationAggregateID, request.LocationID, employee.EmployeeID);
+                _commandSender.Send(removeCommand);
+            }
 
-            _commandSender.Send(command);
+            var assignCommand = _mapper.Map<AssignEmployeeToLocationCommand>(request);
+
+            assignCommand.Id = _locationRepo.GetByID(request.LocationID).AggregateID;
+
+            _commandSender.Send(assignCommand);
             return Ok();
         }
     }
