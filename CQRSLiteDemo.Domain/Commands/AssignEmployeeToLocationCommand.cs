@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace CQRSLiteDemo.Domain.Commands
 {
-    public class AssignEmployeeToLocationCommand : BaseCommand
-    {
-        public readonly int EmployeeID;
-        public readonly int LocationID;
+public class AssignEmployeeToLocationCommand : BaseCommand
+{
+    public readonly int EmployeeID;
+    public readonly int LocationID;
 
-        public AssignEmployeeToLocationCommand(int locationID, int employeeID)
-        {
-            EmployeeID = employeeID;
-            LocationID = locationID;
-        }
+    public AssignEmployeeToLocationCommand(int locationID, int employeeID)
+    {
+        EmployeeID = employeeID;
+        LocationID = locationID;
     }
+}
 }

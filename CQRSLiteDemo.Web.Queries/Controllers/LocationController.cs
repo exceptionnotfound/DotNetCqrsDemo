@@ -29,5 +29,21 @@ namespace CQRSLiteDemo.Web.Queries.Controllers
             }
             return Ok(location);
         }
+
+        [HttpGet]
+        [Route("all")]
+        public IHttpActionResult GetAll()
+        {
+            var locations = _locationRepo.GetAll();
+            return Ok(locations);
+        }
+
+        [HttpGet]
+        [Route("{id}/employees")]
+        public IHttpActionResult GetEmployees(int id)
+        {
+            var employees = _locationRepo.GetEmployees(id);
+            return Ok(employees);
+        }
     }
 }

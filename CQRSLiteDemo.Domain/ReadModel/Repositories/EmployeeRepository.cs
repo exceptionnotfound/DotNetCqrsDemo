@@ -27,9 +27,16 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
 
         public EmployeeDTO GetByID(int employeeID)
         {
+            //Get the Redis database
             var database = _redisConnection.GetDatabase();
+
+            //Get the value for the "employee:{employeeID}" key
             var employee = database.StringGet("employee:" + employeeID.ToString());
+
+            //If we don't find anything
             if (employee.IsNull) return null;
+
+            //Otherwise, return the EmployeeDTO
             return JsonConvert.DeserializeObject<EmployeeDTO>(employee.ToString());
         }
 

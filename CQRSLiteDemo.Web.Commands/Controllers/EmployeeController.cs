@@ -29,6 +29,9 @@ namespace CQRSLiteDemo.Web.Commands.Controllers
         {
             var command = _mapper.Map<CreateEmployeeCommand>(request);
             _commandSender.Send(command);
+
+            var assignCommand = new AssignEmployeeToLocationCommand(request.LocationID, request.EmployeeID);
+            _commandSender.Send(assignCommand);
             return Ok();
         }
     }
