@@ -37,7 +37,7 @@ namespace CQRSLiteDemo.Initializer
             request.AddParameter("EmployeeID", 3);
             request.AddParameter("FirstName", "Reggie");
             request.AddParameter("LastName", "Martinez");
-            request.AddParameter("DateOfBirth", new DateTime(1990, 3, 12));
+            request.AddParameter("DateOfBirth", new DateTime(1992, 10, 22));
             request.AddParameter("JobTitle", "Line Cook");
 
             client.Execute(request);

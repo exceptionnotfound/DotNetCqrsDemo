@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace CQRSLiteDemo.Web.Queries.Controllers
 {
-    [RoutePrefix("location")]
+    [RoutePrefix("locations")]
     public class LocationController : ApiController
     {
         private ILocationRepository _locationRepo;

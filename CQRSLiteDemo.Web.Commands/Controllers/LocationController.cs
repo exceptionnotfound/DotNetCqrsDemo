@@ -50,11 +50,10 @@ namespace CQRSLiteDemo.Web.Commands.Controllers
                 _commandSender.Send(removeCommand);
             }
 
-            var assignCommand = _mapper.Map<AssignEmployeeToLocationCommand>(request);
-
-            assignCommand.Id = _locationRepo.GetByID(request.LocationID).AggregateID;
-
+            var locationAggregateID = _locationRepo.GetByID(request.LocationID).AggregateID;
+            var assignCommand = new AssignEmployeeToLocationCommand(locationAggregateID, request.LocationID, request.EmployeeID);
             _commandSender.Send(assignCommand);
+
             return Ok();
         }
     }
