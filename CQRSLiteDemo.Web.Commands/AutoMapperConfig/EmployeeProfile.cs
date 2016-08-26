@@ -18,7 +18,7 @@ namespace CQRSLiteDemo.Web.Commands.AutoMapperConfig
             CreateMap<CreateEmployeeRequest, CreateEmployeeCommand>()
                 .ConstructUsing(x => new CreateEmployeeCommand(Guid.NewGuid(), x.EmployeeID, x.FirstName, x.LastName, x.DateOfBirth, x.JobTitle));
 
-            CreateMap<EmployeeCreatedEvent, EmployeeDTO>()
+            CreateMap<EmployeeCreatedEvent, EmployeeRM>()
                 .ForMember(dest => dest.AggregateID, opt => opt.MapFrom(src => src.Id));
         }
     }

@@ -25,7 +25,7 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             return !employee.IsNull;
         }
 
-        public EmployeeDTO GetByID(int employeeID)
+        public EmployeeRM GetByID(int employeeID)
         {
             //Get the Redis database
             var database = _redisConnection.GetDatabase();
@@ -37,18 +37,18 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             if (employee.IsNull) return null;
 
             //Otherwise, return the EmployeeDTO
-            return JsonConvert.DeserializeObject<EmployeeDTO>(employee.ToString());
+            return JsonConvert.DeserializeObject<EmployeeRM>(employee.ToString());
         }
 
-        public IEnumerable<EmployeeDTO> GetAll()
+        public IEnumerable<EmployeeRM> GetAll()
         {
-            List<EmployeeDTO> employees = new List<EmployeeDTO>();
+            List<EmployeeRM> employees = new List<EmployeeRM>();
             var database = _redisConnection.GetDatabase();
             var server = _redisConnection.GetServer("localhost", 6379);
             var keys = server.Keys(pattern: "employee:*");
             foreach(var key in keys)
             {
-                employees.Add(JsonConvert.DeserializeObject<EmployeeDTO>(database.StringGet(key)));
+                employees.Add(JsonConvert.DeserializeObject<EmployeeRM>(database.StringGet(key)));
             }
             return employees;
         }

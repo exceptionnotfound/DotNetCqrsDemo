@@ -17,7 +17,7 @@ namespace CQRSLiteDemo.Web.Commands.AutoMapperConfig
             CreateMap<CreateLocationRequest, CreateLocationCommand>()
                 .ConstructUsing(x => new CreateLocationCommand(Guid.NewGuid(), x.LocationID, x.StreetAddress, x.City, x.State, x.PostalCode));
 
-            CreateMap<LocationCreatedEvent, LocationDTO>()
+            CreateMap<LocationCreatedEvent, LocationRM>()
                 .ForMember(dest => dest.AggregateID, opt => opt.MapFrom(src => src.Id));
         }
     }

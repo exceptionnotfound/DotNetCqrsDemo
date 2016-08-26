@@ -9,9 +9,9 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories.Interfaces
     public interface ILocationRepository
     {
         bool LocationExists(int locationID);
-        LocationDTO GetByID(int locationID);
-        IEnumerable<LocationDTO> GetAll();
-        IEnumerable<EmployeeDTO> GetEmployees(int locationID);
+        LocationRM GetByID(int locationID);
+        IEnumerable<LocationRM> GetAll();
+        IEnumerable<EmployeeRM> GetEmployees(int locationID);
         bool HasEmployee(int locationID, int employeeID);
     }
 }

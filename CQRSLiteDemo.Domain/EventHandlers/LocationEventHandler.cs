@@ -30,7 +30,7 @@ namespace CQRSLiteDemo.Domain.EventHandlers
         var database = _redis.GetDatabase();
 
         //Create a new LocationDTO object from the LocationCreatedEvent
-        LocationDTO location = _mapper.Map<LocationDTO>(message);
+        LocationRM location = _mapper.Map<LocationRM>(message);
 
         //Serialize the new LocationDTO into the Redis store, with key "location:{LocationID}"
         database.StringSet("location:" + message.LocationID, JsonConvert.SerializeObject(location));
@@ -42,7 +42,7 @@ namespace CQRSLiteDemo.Domain.EventHandlers
             var database = _redis.GetDatabase();
 
             //Deserialize the LocationDTO object specified by the "location:{locationID}" key
-            var location = JsonConvert.DeserializeObject<LocationDTO>(database.StringGet("location:" + message.NewLocationID.ToString()));
+            var location = JsonConvert.DeserializeObject<LocationRM>(database.StringGet("location:" + message.NewLocationID.ToString()));
 
             //Add the specified employee to the LocationDTO object
             location.Employees.Add(message.EmployeeID);
@@ -53,7 +53,7 @@ namespace CQRSLiteDemo.Domain.EventHandlers
 
 
             //Find the employee which was assigned to this Location
-            var employee = JsonConvert.DeserializeObject<EmployeeDTO>(database.StringGet("employee:" + message.EmployeeID.ToString()));
+            var employee = JsonConvert.DeserializeObject<EmployeeRM>(database.StringGet("employee:" + message.EmployeeID.ToString()));
 
             //Set the employee's LocationID property
             employee.LocationID = message.NewLocationID;
@@ -64,11 +64,11 @@ namespace CQRSLiteDemo.Domain.EventHandlers
 
 
             //Find the list of employees for this location
-            List<EmployeeDTO> employees = new List<EmployeeDTO>();
+            List<EmployeeRM> employees = new List<EmployeeRM>();
             var serializedEmployees = database.StringGet("location:" + message.NewLocationID + ":employees");
             if(!serializedEmployees.IsNull)
             {
-                employees = JsonConvert.DeserializeObject<List<EmployeeDTO>>(serializedEmployees.ToString());
+                employees = JsonConvert.DeserializeObject<List<EmployeeRM>>(serializedEmployees.ToString());
             }
 
             employees.Add(employee);
@@ -82,7 +82,7 @@ namespace CQRSLiteDemo.Domain.EventHandlers
             var database = _redis.GetDatabase();
 
             //Deserialize the LocationDTO object with the key "location:{locationID}"
-            var location = JsonConvert.DeserializeObject<LocationDTO>(database.StringGet("location:" + message.OldLocationID.ToString()));
+            var location = JsonConvert.DeserializeObject<LocationRM>(database.StringGet("location:" + message.OldLocationID.ToString()));
 
             //Remove the employee from the location
             location.Employees.Remove(message.EmployeeID);
@@ -90,13 +90,13 @@ namespace CQRSLiteDemo.Domain.EventHandlers
             //Serialize the changed LocationDTO back into the data store.
             database.StringSet("location:" + message.OldLocationID, JsonConvert.SerializeObject(location));
 
-            var employee = JsonConvert.DeserializeObject<EmployeeDTO>(database.StringGet("employee:" + message.EmployeeID.ToString()));
+            var employee = JsonConvert.DeserializeObject<EmployeeRM>(database.StringGet("employee:" + message.EmployeeID.ToString()));
 
-            List<EmployeeDTO> employees = new List<EmployeeDTO>();
+            List<EmployeeRM> employees = new List<EmployeeRM>();
             var serializedEmployees = database.StringGet("location:" + message.OldLocationID + ":employees");
             if(!serializedEmployees.IsNull)
             {
-                employees = JsonConvert.DeserializeObject<List<EmployeeDTO>>(serializedEmployees.ToString());
+                employees = JsonConvert.DeserializeObject<List<EmployeeRM>>(serializedEmployees.ToString());
                 var removedEmployee = employees.FirstOrDefault(x => x.EmployeeID == message.EmployeeID);
                 if (removedEmployee != null)
                 {

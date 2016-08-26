@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CQRSLiteDemo.Domain.ReadModel
 {
-    public class EmployeeDTO
+    public class EmployeeRM
     {
         public int EmployeeID { get; set; }
         public string FirstName { get; set; }

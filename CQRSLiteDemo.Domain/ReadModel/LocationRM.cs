@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CQRSLiteDemo.Domain.ReadModel
 {
-    public class LocationDTO
+    public class LocationRM
     {
         public int LocationID { get; set; }
         public string StreetAddress { get; set; }
@@ -16,7 +16,7 @@ namespace CQRSLiteDemo.Domain.ReadModel
         public List<int> Employees { get; set; }
         public Guid AggregateID { get; set; }
 
-        public LocationDTO()
+        public LocationRM()
         {
             Employees = new List<int>();
         }

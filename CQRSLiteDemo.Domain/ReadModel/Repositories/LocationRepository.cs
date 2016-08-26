@@ -17,7 +17,7 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
         {
             _redisConnection = redisConnection;
         }
-        public LocationDTO GetByID(int locationID)
+        public LocationRM GetByID(int locationID)
         {
             //Get the redis database
             var database = _redisConnection.GetDatabase();
@@ -29,7 +29,7 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             if (locationResult.IsNull) return null;
 
             //Otherwise return instance of LocationDTO
-            return JsonConvert.DeserializeObject<LocationDTO>(locationResult.ToString());
+            return JsonConvert.DeserializeObject<LocationRM>(locationResult.ToString());
         }
 
         public bool LocationExists(int locationID)
@@ -50,15 +50,15 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             var database = _redisConnection.GetDatabase();
 
             //Deserialize the LocationDTO with the key location:{locationID}
-            var location = JsonConvert.DeserializeObject<LocationDTO>(database.StringGet("location:" + locationID.ToString()));
+            var location = JsonConvert.DeserializeObject<LocationRM>(database.StringGet("location:" + locationID.ToString()));
 
             //If that location has the specified Employee, return true
             return location.Employees.Contains(employeeID);
         }
 
-        public IEnumerable<LocationDTO> GetAll()
+        public IEnumerable<LocationRM> GetAll()
         {
-            List<LocationDTO> locations = new List<LocationDTO>();
+            List<LocationRM> locations = new List<LocationRM>();
 
             //Get the Redis database
             var database = _redisConnection.GetDatabase();
@@ -72,17 +72,17 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             //For each of those keys, deserialize an instance of LocationDTO
             foreach (var key in keys)
             {
-                locations.Add(JsonConvert.DeserializeObject<LocationDTO>(database.StringGet(key)));
+                locations.Add(JsonConvert.DeserializeObject<LocationRM>(database.StringGet(key)));
             }
             return locations;
         }
-        public IEnumerable<EmployeeDTO> GetEmployees(int locationID)
+        public IEnumerable<EmployeeRM> GetEmployees(int locationID)
         {
-            List<EmployeeDTO> employees = new List<EmployeeDTO>();
+            List<EmployeeRM> employees = new List<EmployeeRM>();
             var database = _redisConnection.GetDatabase();
 
             //Return a list of EmployeeDTO which represents all Employees at a given Location
-            return JsonConvert.DeserializeObject<List<EmployeeDTO>>(database.StringGet("location:" + locationID + ":employees"));
+            return JsonConvert.DeserializeObject<List<EmployeeRM>>(database.StringGet("location:" + locationID + ":employees"));
         }
     }
 }

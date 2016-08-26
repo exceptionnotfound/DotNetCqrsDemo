@@ -26,7 +26,7 @@ namespace CQRSLiteDemo.Domain.EventHandlers
         public void Handle(EmployeeCreatedEvent message)
         {
             var database = _redis.GetDatabase();
-            EmployeeDTO employee = _mapper.Map<EmployeeDTO>(message);
+            EmployeeRM employee = _mapper.Map<EmployeeRM>(message);
             database.StringSet("employee:" + message.EmployeeID.ToString(), JsonConvert.SerializeObject(employee));
         }
     }

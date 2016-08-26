@@ -74,8 +74,8 @@
     <Compile Include="Events\Locations\EmployeeRemovedFromLocationEvent.cs" />
     <Compile Include="Events\Locations\LocationCreatedEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadModel\EmployeeDTO.cs" />
-    <Compile Include="ReadModel\LocationDTO.cs" />
+    <Compile Include="ReadModel\EmployeeRM.cs" />
+    <Compile Include="ReadModel\LocationRM.cs" />
     <Compile Include="ReadModel\Repositories\EmployeeRepository.cs" />
     <Compile Include="ReadModel\Repositories\Interfaces\IEmployeeRepository.cs" />
     <Compile Include="ReadModel\Repositories\Interfaces\ILocationRepository.cs" />
