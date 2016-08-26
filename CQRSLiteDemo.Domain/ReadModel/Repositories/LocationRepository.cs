@@ -66,8 +66,8 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             //Get the Redis server
             var server = _redisConnection.GetServer("localhost", 6379);
 
-            //Find all keys on the server which begin with "location:"
-            var keys = server.Keys(pattern: "location:*");
+            //Find all keys on the server which begin with "location:" and end with a number
+            var keys = server.Keys(pattern: "location:[0-9]");
 
             //For each of those keys, deserialize an instance of LocationDTO
             foreach (var key in keys)
