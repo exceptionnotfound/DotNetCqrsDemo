@@ -11,7 +11,12 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
     public class BaseRepository
     {
         private readonly IConnectionMultiplexer _redisConnection;
+
+        /// <summary>
+        /// The Namespace is the first part of any key created by this Repository, e.g. "location" or "employee"
+        /// </summary>
         private readonly string _namespace;
+
         public BaseRepository(IConnectionMultiplexer redis, string nameSpace)
         {
             _redisConnection = redis;
@@ -28,7 +33,7 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
             var key = MakeKey(keySuffix);
             var database = _redisConnection.GetDatabase();
             var serializedObject = database.StringGet(key);
-            if (serializedObject.IsNullOrEmpty) throw new ArgumentNullException();
+            if (serializedObject.IsNullOrEmpty) throw new ArgumentNullException(); //Throw a better exception than this, please
             return JsonConvert.DeserializeObject<T>(serializedObject.ToString());
         }
 

@@ -16,12 +16,10 @@ namespace CQRSLiteDemo.Domain.EventHandlers
 {
     public class EmployeeEventHandler : IEventHandler<EmployeeCreatedEvent>
     {
-        private readonly IConnectionMultiplexer _redis;
         private readonly IMapper _mapper;
         private readonly IEmployeeRepository _employeeRepo;
-        public EmployeeEventHandler(IConnectionMultiplexer redis, IMapper mapper, IEmployeeRepository employeeRepo)
+        public EmployeeEventHandler(IMapper mapper, IEmployeeRepository employeeRepo)
         {
-            _redis = redis;
             _mapper = mapper;
             _employeeRepo = employeeRepo;
         }

@@ -17,13 +17,11 @@ namespace CQRSLiteDemo.Domain.EventHandlers
                                         IEventHandler<EmployeeAssignedToLocationEvent>,
                                         IEventHandler<EmployeeRemovedFromLocationEvent>
     {
-        private readonly IConnectionMultiplexer _redis;
         private readonly IMapper _mapper;
         private readonly ILocationRepository _locationRepo;
         private readonly IEmployeeRepository _employeeRepo;
-        public LocationEventHandler(IConnectionMultiplexer redis, IMapper mapper, ILocationRepository locationRepo, IEmployeeRepository employeeRepo)
+        public LocationEventHandler(IMapper mapper, ILocationRepository locationRepo, IEmployeeRepository employeeRepo)
         {
-            _redis = redis;
             _mapper = mapper;
             _locationRepo = locationRepo;
             _employeeRepo = employeeRepo;
