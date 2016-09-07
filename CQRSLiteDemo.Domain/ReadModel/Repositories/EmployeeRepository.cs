@@ -9,48 +9,49 @@ using System.Threading.Tasks;
 
 namespace CQRSLiteDemo.Domain.ReadModel.Repositories
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : BaseRepository, IEmployeeRepository
     {
-        private readonly IConnectionMultiplexer _redisConnection;
-
-        public EmployeeRepository(IConnectionMultiplexer redisConnection)
-        {
-            _redisConnection = redisConnection;
-        }
-
-        public bool EmployeeExists(int employeeID)
-        {
-            var database = _redisConnection.GetDatabase();
-            var employee = database.StringGet("employee:" + employeeID.ToString());
-            return !employee.IsNull;
-        }
+        public EmployeeRepository(IConnectionMultiplexer redisConnection) : base(redisConnection, "employee") { }
 
         public EmployeeRM GetByID(int employeeID)
         {
-            //Get the Redis database
-            var database = _redisConnection.GetDatabase();
+            return Get<EmployeeRM>(employeeID);
+        }
 
-            //Get the value for the "employee:{employeeID}" key
-            var employee = database.StringGet("employee:" + employeeID.ToString());
-
-            //If we don't find anything
-            if (employee.IsNull) return null;
-
-            //Otherwise, return the EmployeeDTO
-            return JsonConvert.DeserializeObject<EmployeeRM>(employee.ToString());
+        public List<EmployeeRM> GetMultiple(List<int> employeeIDs)
+        {
+            return GetMultiple<EmployeeRM>(employeeIDs);
         }
 
         public IEnumerable<EmployeeRM> GetAll()
         {
-            List<EmployeeRM> employees = new List<EmployeeRM>();
-            var database = _redisConnection.GetDatabase();
-            var server = _redisConnection.GetServer("localhost", 6379);
-            var keys = server.Keys(pattern: "employee:*");
-            foreach(var key in keys)
+            return Get<List<EmployeeRM>>("all");
+        }
+
+        public void Save(EmployeeRM employee)
+        {
+            Save(employee.EmployeeID, employee);
+            MergeIntoAllCollection(employee);
+        }
+
+        private void MergeIntoAllCollection(EmployeeRM employee)
+        {
+            List<EmployeeRM> allEmployees = new List<EmployeeRM>();
+            if (Exists("all"))
             {
-                employees.Add(JsonConvert.DeserializeObject<EmployeeRM>(database.StringGet(key)));
+                allEmployees = Get<List<EmployeeRM>>("all");
             }
-            return employees;
+
+            //If the district already exists in the ALL collection, remove that entry
+            if (allEmployees.Any(x => x.EmployeeID == employee.EmployeeID))
+            {
+                allEmployees.Remove(allEmployees.First(x => x.EmployeeID == employee.EmployeeID));
+            }
+
+            //Add the modified district to the ALL collection
+            allEmployees.Add(employee);
+
+            Save("all", allEmployees);
         }
     }
 }

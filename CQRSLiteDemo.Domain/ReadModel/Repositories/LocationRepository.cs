@@ -9,48 +9,23 @@ using System.Threading.Tasks;
 
 namespace CQRSLiteDemo.Domain.ReadModel.Repositories
 {
-    public class LocationRepository : ILocationRepository
+    public class LocationRepository : BaseRepository, ILocationRepository
     {
-        private readonly IConnectionMultiplexer _redisConnection;
-
-        public LocationRepository(IConnectionMultiplexer redisConnection)
-        {
-            _redisConnection = redisConnection;
-        }
+        public LocationRepository(IConnectionMultiplexer redisConnection) : base(redisConnection, "location") { }
         public LocationRM GetByID(int locationID)
         {
-            //Get the redis database
-            var database = _redisConnection.GetDatabase();
-
-            //Get the serialized location
-            var locationResult = database.StringGet("location:" + locationID.ToString());
-
-            //If the location doesn't exist
-            if (locationResult.IsNull) return null;
-
-            //Otherwise return instance of LocationDTO
-            return JsonConvert.DeserializeObject<LocationRM>(locationResult.ToString());
+            return Get<LocationRM>(locationID);
         }
 
-        public bool LocationExists(int locationID)
+        public List<LocationRM> GetMultiple(List<int> locationIDs)
         {
-            //Get the Redis database
-            var database = _redisConnection.GetDatabase();
-
-            //Is there a location with that ID?
-            var locationResult = database.StringGet("location:" + locationID.ToString());
-
-            //If there is, return true
-            return !locationResult.IsNull;
+            return GetMultiple(locationIDs);
         }
 
         public bool HasEmployee(int locationID, int employeeID)
         {
-            //Get the Redis database
-            var database = _redisConnection.GetDatabase();
-
             //Deserialize the LocationDTO with the key location:{locationID}
-            var location = JsonConvert.DeserializeObject<LocationRM>(database.StringGet("location:" + locationID.ToString()));
+            var location = Get<LocationRM>(locationID);
 
             //If that location has the specified Employee, return true
             return location.Employees.Contains(employeeID);
@@ -58,31 +33,37 @@ namespace CQRSLiteDemo.Domain.ReadModel.Repositories
 
         public IEnumerable<LocationRM> GetAll()
         {
-            List<LocationRM> locations = new List<LocationRM>();
-
-            //Get the Redis database
-            var database = _redisConnection.GetDatabase();
-
-            //Get the Redis server
-            var server = _redisConnection.GetServer("localhost", 6379);
-
-            //Find all keys on the server which begin with "location:" and end with a number
-            var keys = server.Keys(pattern: "location:[0-9]");
-
-            //For each of those keys, deserialize an instance of LocationDTO
-            foreach (var key in keys)
-            {
-                locations.Add(JsonConvert.DeserializeObject<LocationRM>(database.StringGet(key)));
-            }
-            return locations;
+            return Get<List<LocationRM>>("all");
         }
         public IEnumerable<EmployeeRM> GetEmployees(int locationID)
         {
-            List<EmployeeRM> employees = new List<EmployeeRM>();
-            var database = _redisConnection.GetDatabase();
+            return Get<List<EmployeeRM>>(locationID.ToString() + ":employees");
+        }
 
-            //Return a list of EmployeeDTO which represents all Employees at a given Location
-            return JsonConvert.DeserializeObject<List<EmployeeRM>>(database.StringGet("location:" + locationID + ":employees"));
+        public void Save(LocationRM location)
+        {
+            Save(location.LocationID, location);
+            MergeIntoAllCollection(location);
+        }
+
+        private void MergeIntoAllCollection(LocationRM location)
+        {
+            List<LocationRM> allLocations = new List<LocationRM>();
+            if (Exists("all"))
+            {
+                allLocations = Get<List<LocationRM>>("all");
+            }
+
+            //If the district already exists in the ALL collection, remove that entry
+            if (allLocations.Any(x => x.LocationID == location.LocationID))
+            {
+                allLocations.Remove(allLocations.First(x => x.LocationID == location.LocationID));
+            }
+
+            //Add the modified district to the ALL collection
+            allLocations.Add(location);
+
+            Save("all", allLocations);
         }
     }
 }

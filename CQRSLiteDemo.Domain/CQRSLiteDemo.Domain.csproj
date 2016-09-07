@@ -76,7 +76,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModel\EmployeeRM.cs" />
     <Compile Include="ReadModel\LocationRM.cs" />
+    <Compile Include="ReadModel\Repositories\BaseRepository.cs" />
     <Compile Include="ReadModel\Repositories\EmployeeRepository.cs" />
+    <Compile Include="ReadModel\Repositories\Interfaces\IBaseRepository.cs" />
     <Compile Include="ReadModel\Repositories\Interfaces\IEmployeeRepository.cs" />
     <Compile Include="ReadModel\Repositories\Interfaces\ILocationRepository.cs" />
     <Compile Include="ReadModel\Repositories\LocationRepository.cs" />

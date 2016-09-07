@@ -20,7 +20,7 @@ namespace CQRSLiteDemo.Web.Commands.Requests.Locations
     {
         public CreateLocationRequestValidator(ILocationRepository locationRepo)
         {
-            RuleFor(x => x.LocationID).Must(x => !locationRepo.LocationExists(x)).WithMessage("A Location with this ID already exists.");
+            RuleFor(x => x.LocationID).Must(x => !locationRepo.Exists(x)).WithMessage("A Location with this ID already exists.");
             RuleFor(x => x.StreetAddress).NotNull().NotEmpty().WithMessage("The Street Address cannot be null");
             RuleFor(x => x.City).NotNull().NotEmpty().WithMessage("The City cannot be null");
             RuleFor(x => x.State).NotNull().NotEmpty().WithMessage("The State cannot be null");

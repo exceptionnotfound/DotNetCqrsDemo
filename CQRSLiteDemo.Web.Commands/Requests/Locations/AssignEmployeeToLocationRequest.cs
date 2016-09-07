@@ -17,8 +17,8 @@ namespace CQRSLiteDemo.Web.Commands.Requests.Locations
     {
         public AssignEmployeeToLocationRequestValidator(IEmployeeRepository employeeRepo, ILocationRepository locationRepo)
         {
-            RuleFor(x => x.LocationID).Must(x => locationRepo.LocationExists(x)).WithMessage("No Location with this ID exists.");
-            RuleFor(x => x.EmployeeID).Must(x => employeeRepo.EmployeeExists(x)).WithMessage("No Employee with this ID exists.");
+            RuleFor(x => x.LocationID).Must(x => locationRepo.Exists(x)).WithMessage("No Location with this ID exists.");
+            RuleFor(x => x.EmployeeID).Must(x => employeeRepo.Exists(x)).WithMessage("No Employee with this ID exists.");
             RuleFor(x => new { x.LocationID, x.EmployeeID }).Must(x => !locationRepo.HasEmployee(x.LocationID, x.EmployeeID)).WithMessage("This Employee is already assigned to that Location.");
         }
     }

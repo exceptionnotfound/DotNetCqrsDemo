@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace CQRSLiteDemo.Domain.ReadModel.Repositories.Interfaces
 {
-    public interface IEmployeeRepository : IBaseRepository<EmployeeRM>
+    public interface IBaseRepository<T>
     {
-        IEnumerable<EmployeeRM> GetAll();
+        T GetByID(int id);
+        List<T> GetMultiple(List<int> ids);
+        bool Exists(int id);
+        void Save(T item);
     }
 }

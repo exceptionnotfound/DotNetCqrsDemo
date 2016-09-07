@@ -2,6 +2,7 @@
 using CQRSlite.Events;
 using CQRSLiteDemo.Domain.Events.Employees;
 using CQRSLiteDemo.Domain.ReadModel;
+using CQRSLiteDemo.Domain.ReadModel.Repositories.Interfaces;
 using CQRSLiteDemo.Domain.WriteModel;
 using Newtonsoft.Json;
 using StackExchange.Redis;
@@ -17,17 +18,18 @@ namespace CQRSLiteDemo.Domain.EventHandlers
     {
         private readonly IConnectionMultiplexer _redis;
         private readonly IMapper _mapper;
-        public EmployeeEventHandler(IConnectionMultiplexer redis, IMapper mapper)
+        private readonly IEmployeeRepository _employeeRepo;
+        public EmployeeEventHandler(IConnectionMultiplexer redis, IMapper mapper, IEmployeeRepository employeeRepo)
         {
             _redis = redis;
             _mapper = mapper;
+            _employeeRepo = employeeRepo;
         }
 
         public void Handle(EmployeeCreatedEvent message)
         {
-            var database = _redis.GetDatabase();
             EmployeeRM employee = _mapper.Map<EmployeeRM>(message);
-            database.StringSet("employee:" + message.EmployeeID.ToString(), JsonConvert.SerializeObject(employee));
+            _employeeRepo.Save(employee);
         }
     }
 }
